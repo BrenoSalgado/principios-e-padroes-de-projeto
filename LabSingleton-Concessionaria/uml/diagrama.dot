@@ -1,0 +1,66 @@
+digraph UML {
+  graph [rankdir=TB, splines=ortho, nodesep=0.7, ranksep=0.9, fontname="Helvetica", bgcolor="white"];
+  node  [shape=plain, fontname="Helvetica", fontsize=11];
+  edge  [fontname="Helvetica", fontsize=10];
+
+  Vendedor [label=<
+  <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFF7E0">
+    <TR><TD ALIGN="CENTER"><I>«Singleton»</I><BR/><B>Vendedor</B></TD></TR>
+    <HR/>
+    <TR><TD ALIGN="LEFT">- nome : String<BR ALIGN="LEFT"/>- endereco : String<BR ALIGN="LEFT"/>- email : String<BR ALIGN="LEFT"/><U>- instancia : Vendedor</U>   {static}<BR ALIGN="LEFT"/>- estrategia : EstrategiaDesconto<BR ALIGN="LEFT"/>- observadores : List&lt;ObservadorVenda&gt;<BR ALIGN="LEFT"/>- ultimoVeiculoVendido : String<BR ALIGN="LEFT"/>- ultimoPrecoFinal : double<BR ALIGN="LEFT"/></TD></TR>
+    <HR/>
+    <TR><TD ALIGN="LEFT">- Vendedor()   «private»<BR ALIGN="LEFT"/><U>+ getInstance() : Vendedor</U>   {static}<BR ALIGN="LEFT"/>+ setNome(nome : String) : void<BR ALIGN="LEFT"/>+ setEndereco(endereco : String) : void<BR ALIGN="LEFT"/>+ setEmail(email : String) : void<BR ALIGN="LEFT"/>+ exibir() : void<BR ALIGN="LEFT"/>+ setEstrategia(e : EstrategiaDesconto) : void<BR ALIGN="LEFT"/>+ calcularPrecoFinal(preco : double) : double<BR ALIGN="LEFT"/>+ adicionarObservador(o : ObservadorVenda) : void<BR ALIGN="LEFT"/>+ removerObservador(o : ObservadorVenda) : void<BR ALIGN="LEFT"/>+ notificarObservadores() : void<BR ALIGN="LEFT"/>+ getUltimoVeiculoVendido() : String<BR ALIGN="LEFT"/>+ getUltimoPrecoFinal() : double<BR ALIGN="LEFT"/>+ concluirVenda(veiculo : String, preco : double) : void<BR ALIGN="LEFT"/></TD></TR>
+  </TABLE>>];
+
+  EstrategiaDesconto [label=<
+  <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#E8F1FF">
+    <TR><TD><I>«interface»</I><BR/><B><I>EstrategiaDesconto</I></B></TD></TR><HR/>
+    <TR><TD ALIGN="LEFT">+ calcular(preco : double) : double<BR ALIGN="LEFT"/>+ getDescricao() : String<BR ALIGN="LEFT"/></TD></TR>
+  </TABLE>>];
+
+  ObservadorVenda [label=<
+  <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#E9F7EC">
+    <TR><TD><I>«interface»</I><BR/><B><I>ObservadorVenda</I></B></TD></TR><HR/>
+    <TR><TD ALIGN="LEFT">+ atualizar() : void<BR ALIGN="LEFT"/></TD></TR>
+  </TABLE>>];
+
+  DescontoNormal [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#E8F1FF"><TR><TD><B>DescontoNormal</B></TD></TR><HR/><TR><TD ALIGN="LEFT">+ calcular(preco : double) : double<BR ALIGN="LEFT"/>+ getDescricao() : String<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+  DescontoPromocional [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#E8F1FF"><TR><TD><B>DescontoPromocional</B></TD></TR><HR/><TR><TD ALIGN="LEFT">+ calcular(preco : double) : double<BR ALIGN="LEFT"/>+ getDescricao() : String<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+  DescontoFuncionario [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F3F3F3"><TR><TD><B>DescontoFuncionario</B><BR/><I>(extra)</I></TD></TR><HR/><TR><TD ALIGN="LEFT">+ calcular(preco : double) : double<BR ALIGN="LEFT"/>+ getDescricao() : String<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+
+  Estoque [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#E9F7EC"><TR><TD><B>Estoque</B></TD></TR><HR/><TR><TD ALIGN="LEFT">- vendedor : Vendedor<BR ALIGN="LEFT"/></TD></TR><HR/><TR><TD ALIGN="LEFT">+ Estoque(vendedor : Vendedor)<BR ALIGN="LEFT"/>+ atualizar() : void<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+  Financeiro [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#E9F7EC"><TR><TD><B>Financeiro</B></TD></TR><HR/><TR><TD ALIGN="LEFT">- vendedor : Vendedor<BR ALIGN="LEFT"/></TD></TR><HR/><TR><TD ALIGN="LEFT">+ Financeiro(vendedor : Vendedor)<BR ALIGN="LEFT"/>+ atualizar() : void<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+  Auditoria [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F3F3F3"><TR><TD><B>Auditoria</B><BR/><I>(extra)</I></TD></TR><HR/><TR><TD ALIGN="LEFT">- vendedor : Vendedor<BR ALIGN="LEFT"/></TD></TR><HR/><TR><TD ALIGN="LEFT">+ Auditoria(vendedor : Vendedor)<BR ALIGN="LEFT"/>+ atualizar() : void<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+
+  Programa [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD><B>Programa</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><U>+ main(args : String[]) : void</U><BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+
+  { rank=same; EstrategiaDesconto; ObservadorVenda; }
+  { rank=same; DescontoNormal; DescontoPromocional; DescontoFuncionario; Estoque; Financeiro; Auditoria; }
+
+  Programa -> Vendedor [style=dashed, arrowhead=vee, xlabel="«use»"];
+  Vendedor -> EstrategiaDesconto [arrowhead=vee, xlabel="-estrategia   1"];
+  Vendedor -> ObservadorVenda [arrowhead=vee, arrowtail=odiamond, dir=both, xlabel="-observadores   0..*"];
+
+  DescontoNormal -> EstrategiaDesconto [style=dashed, arrowhead=onormal];
+  DescontoPromocional -> EstrategiaDesconto [style=dashed, arrowhead=onormal];
+  DescontoFuncionario -> EstrategiaDesconto [style=dashed, arrowhead=onormal];
+  Estoque -> ObservadorVenda [style=dashed, arrowhead=onormal];
+  Financeiro -> ObservadorVenda [style=dashed, arrowhead=onormal];
+  Auditoria -> ObservadorVenda [style=dashed, arrowhead=onormal];
+
+  Estoque -> Vendedor [arrowhead=vee, constraint=false, color="#2E7D32", fontcolor="#2E7D32", xlabel="-vendedor"];
+  Financeiro -> Vendedor [arrowhead=vee, constraint=false, color="#2E7D32"];
+  Auditoria -> Vendedor [arrowhead=vee, constraint=false, color="#2E7D32"];
+
+  node [shape=note, style=filled, fillcolor="#FFFDE7", fontsize=10, fontname="Courier"];
+  NotaSingleton [label="getInstance():\l  if (instancia == null)\l    instancia = new Vendedor();  // lazy\l  return instancia;\l"];
+  NotaVenda [label="concluirVenda(veiculo, preco):\l  precoFinal = estrategia.calcular(preco);\l  ultimoVeiculoVendido = veiculo;\l  ultimoPrecoFinal = precoFinal;\l  notificarObservadores();\l"];
+  NotaPull [label="atualizar():  // modelo pull\l  vendedor.getUltimoVeiculoVendido();\l  vendedor.getUltimoPrecoFinal();\l"];
+  { rank=same; NotaSingleton; Programa; NotaVenda; }
+  NotaSingleton -> Vendedor [style=dashed, arrowhead=none, color="#999999"];
+  NotaVenda -> Vendedor [style=dashed, arrowhead=none, color="#999999"];
+  NotaPull -> Estoque [style=dashed, arrowhead=none, color="#999999", constraint=false];
+  NotaPull -> Financeiro [style=dashed, arrowhead=none, color="#999999", constraint=false];
+  NotaPull -> Auditoria [style=dashed, arrowhead=none, color="#999999", constraint=false];
+  ObservadorVenda -> NotaPull [style=invis];
+}
